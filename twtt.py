@@ -30,7 +30,7 @@ def split_tweet(tweet):
     processed = re.split("(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?|!)\s", tweet) # create potential boundries
 
     i = 0
-    while i < len(processed): # loop through words and check boundries
+    while i < len(processed):                   # loop through words and check boundries
         words = processed[i].split(' ')
         if (len(processed) > i + 1):
             if ((words[-1] + '\n') in abbrev):
@@ -43,9 +43,12 @@ def split_tweet(tweet):
                     new_word = processed[i] + " " + processed[i + 1]
                     processed.pop(i)
                     processed[i] = new_word
-        else:
-            return processed[0].strip()
         i = i + 1
+
+    q = 0
+    while q < len(processed):                   # strip trailing whitespace
+        processed[q] = processed[q].strip()
+        q = q + 1
 
     processed = "\n".join(processed)
     return processed
@@ -78,5 +81,3 @@ for ugly_tweet in tweet_dump:
     text = text.replace('@', '')                   # remove @ before usernames
     text = split_tweet(text)
     print(text)
-#print(split_tweet("So much fun :-) There literally is an app for just about anything."))
-
