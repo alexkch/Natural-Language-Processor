@@ -28,22 +28,25 @@ def html_to_acsii(text):
 def split_tweet(tweet):
     tweet = tweet.strip()
     processed = re.split("(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?|!)\s", tweet) # create potential boundries
-    print(processed) # test
+
     i = 0
     while i < len(processed): # loop through words and check boundries
         words = processed[i].split(' ')
-        if (len(processed) > 1):
+        if (len(processed) > i + 1):
             if ((words[-1] + '\n') in abbrev):
                 new_word = processed[i] + " " + processed[i + 1]
                 processed.pop(i)
                 processed[i] = new_word
             if(words[-1][-1] == '!' or words[-1][-1] == '?'):
-                if processed[i+1].split(' ')[0].islower():
+                temp = processed[i+1].split(' ')
+                if temp[0].islower():
                     new_word = processed[i] + " " + processed[i + 1]
                     processed.pop(i)
                     processed[i] = new_word
-
+        else:
+            return processed[0].strip()
         i = i + 1
+
     processed = "\n".join(processed)
     return processed
 
@@ -73,8 +76,7 @@ for ugly_tweet in tweet_dump:
     text = re.sub(r"http\S+", "", text)            # remove URLs
     text = text.replace('#', '')                   # remove hashtags
     text = text.replace('@', '')                   # remove @ before usernames
-    #text = split_tweet(text)
-
-    # test
-print(split_tweet("So much fun :-) There literally is an app for just about anything."))
+    text = split_tweet(text)
+    print(text)
+#print(split_tweet("So much fun :-) There literally is an app for just about anything."))
 
