@@ -61,6 +61,9 @@ def split_tweet(tweet):
     processed = "\n".join(processed)
     return processed
 
+def split_punc(tweet):
+	processed = re.sub(r"([a-zA-Z1-9])([,.!])", r"\1 \2", tweet)
+	return processed
 
 #get arguments
 filepath = sys.argv[1]
@@ -88,4 +91,9 @@ for ugly_tweet in tweet_dump:
     text = text.replace('#', '')                   # remove hashtags
     text = text.replace('@', '')                   # remove @ before usernames
     text = split_tweet(text)
-    print(text)
+    
+    print(text) #for testing purposes rev 2.
+    text = split_punc(text)
+    ##t = re.sub(r"([a-zA-Z])([,.!])", r"\1 \2", t) for testing
+    print(text) #for testing
+##print(t) for testing
