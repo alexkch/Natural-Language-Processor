@@ -79,9 +79,11 @@ def split_contracted(tweet):
 	processed = re.sub(r"([^n])(')", r"\1 \2", process)  # split's contraction for special case "n't"
 	#print(test)
 	#print(test2)
+	return processed
 	
 def split_tolist(tweet):	
-	return tweet.split()
+	processed = tweet.split()
+	return processed
 	
 def tag(tweet):
 	tagger = NLPlib.NLPlib()
@@ -119,8 +121,9 @@ for ugly_tweet in tweet_dump:
     text = split_punc(text)
     text = split_contracted(text)
     text = split_tolist(text)
+    print(text)
     
 #print(text)  for testing
-text = tag(text)
+#text = tag(text)
 #print(text) for testing
     
