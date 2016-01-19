@@ -19,9 +19,9 @@
 #Behaviour on Academic Matters and the Code of Student Conduct, as well
 #as the collaboration policies of this course.
 
-import csv, sys, re, html.parser, sys
+import csv, sys, re, sys, NLPlib
+from HTMLParser import HTMLParser
 sys.path.insert(0, '/tagger')
-import NLPlib
 
 # read in standard abbreviations file
 f = open("abbrev.english")
@@ -34,7 +34,7 @@ f2.close()
 
 # simple HTML code to ASCII converter
 def html_to_acsii(text):
-    hparser = html.parser.HTMLParser()
+    hparser = HTMLParser()
     new_text = hparser.unescape(text)
     return new_text
 
@@ -114,7 +114,7 @@ for ugly_tweet in tweet_dump:
     text = text.replace('#', '')                   # remove hashtags
     text = text.replace('@', '')                   # remove @ before usernames
     text = split_tweet(text)
-    
+
     #print(text) #for testing purposes rev 2.
     text = split_punc(text)
     text = split_contracted(text)
