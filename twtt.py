@@ -19,7 +19,9 @@
 #Behaviour on Academic Matters and the Code of Student Conduct, as well
 #as the collaboration policies of this course.
 
-import csv, sys, re, html.parser #, NLPlib
+import csv, sys, re, html.parser, sys
+sys.path.insert(0, '/tagger')
+import NLPlib
 
 # read in standard abbreviations file
 f = open("abbrev.english")
@@ -84,6 +86,12 @@ def split_contracted(tweet):
 def split_tolist(tweet):
 	
 	return tweet.split()
+	
+def tag(tweet):
+	
+	tagger = NLPlib.NLPlib()
+	taggedtweet = tagger.tag(tweet)
+	return taggedtweet
 
 #get arguments
 filepath = sys.argv[1]
@@ -116,9 +124,13 @@ for ugly_tweet in tweet_dump:
     text = split_punc(text)
     split_contracted(text)
     
-    print(text)
+
     text = split_tolist(text)
-    print(text)
+
+print(text)
+text = tag(text)
+print(text)
+    
 
 
 
