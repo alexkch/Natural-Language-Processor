@@ -21,7 +21,6 @@
 
 import csv, sys, re, sys, NLPlib
 from HTMLParser import HTMLParser
-sys.path.insert(0, '/tagger')
 
 # read in standard abbreviations file
 f = open("abbrev.english")
@@ -87,8 +86,14 @@ def split_tolist(tweet):
 	
 def tag(tweet):
 	tagger = NLPlib.NLPlib()
-	taggedtweet = tagger.tag(tweet)
-	return taggedtweet
+	print(tweet)
+	tags = tagger.tag(tweet)
+	i = 0
+	for tag in tags:
+		tweet[i] = '{0}/{1}'.format(tweet[i], tag)
+		i += 1
+	print(tweet)
+	return tweet
 
 #get arguments
 filepath = sys.argv[1]
@@ -121,8 +126,8 @@ for ugly_tweet in tweet_dump:
     text = split_punc(text)
     text = split_contracted(text)
     text = split_tolist(text)
-    print(text)
-    
+    text = tag(text)
+
 #print(text)  for testing
 #text = tag(text)
 #print(text) for testing
