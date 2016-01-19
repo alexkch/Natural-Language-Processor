@@ -19,12 +19,16 @@
 #Behaviour on Academic Matters and the Code of Student Conduct, as well
 #as the collaboration policies of this course.
 
-import csv, sys, re, html.parser
+import csv, sys, re, html.parser #, NLPlib
 
 # read in standard abbreviations file
 f = open("abbrev.english")
 abbrev = f.readlines()
 f.close()
+
+f2 = open("contractedwords")
+conwords = f2.readlines()
+f2.close()
 
 # simple HTML code to ASCII converter
 def html_to_acsii(text):
@@ -62,8 +66,19 @@ def split_tweet(tweet):
     return processed
 
 def split_punc(tweet):
-	processed = re.sub(r"([a-zA-Z1-9])([,.!])", r"\1 \2", tweet)
+	processed = re.sub(r"([\w])([,.!;])", r"\1 \2", tweet)
+	processed = re.sub(r"([,.!;])([\w])", r"\1 \2", processed)
 	return processed
+
+def split_contracted(tweet):
+
+	#test = "coul3n't would;n'tn't didn't dam't dmint dimnn't n't 3n't"
+	test = re.sub(r"(\w+(?=n't))(n't)", r"\1 \2", test)
+	#test2 = "couldn't would't d'll na'vi'il dams'"
+	test2 = re.sub(r"([^n])(')", r"\1 \2", test2)
+	
+	#print(test)
+	#print(test2)
 
 #get arguments
 filepath = sys.argv[1]
@@ -92,8 +107,9 @@ for ugly_tweet in tweet_dump:
     text = text.replace('@', '')                   # remove @ before usernames
     text = split_tweet(text)
     
-    print(text) #for testing purposes rev 2.
+    #print(text) #for testing purposes rev 2.
     text = split_punc(text)
-    ##t = re.sub(r"([a-zA-Z])([,.!])", r"\1 \2", t) for testing
-    print(text) #for testing
+	split_contracted(text)
+
+    #print(text) #for testing
 ##print(t) for testing
