@@ -74,27 +74,23 @@ def split_punc(tweet):
 
 # split contracted words
 def split_contracted(tweet):
-	#test = "coul3n't would;n'tn't didn't dam't dmint dimnn't n't 3n't"
-	process = re.sub(r"(\w+(?=n't))(n't)", r"\1 \2", tweet) #split's word with its contraction, (ie: he'll -> he 'll) 
-	#test2 = "couldn't would't d'll na'vi'il dams'"
+	process = re.sub(r"(\w+(?=n't))(n't)", r"\1 \2", tweet) #split's word with its contraction, (ie: he'll -> he 'll)
 	processed = re.sub(r"([^n])(')", r"\1 \2", process)  # split's contraction for special case "n't"
-	#print(test)
-	#print(test2)
 	return processed
-	
+
+# split the tweet into a list for tagging
 def split_tolist(tweet):	
 	processed = tweet.split()
 	return processed
-	
+
+# tweet tagger
 def tag(tweet):
 	tagger = NLPlib.NLPlib()
-	print(tweet)
 	tags = tagger.tag(tweet)
 	i = 0
 	for tag in tags:
 		tweet[i] = '{0}/{1}'.format(tweet[i], tag)
 		i += 1
-	print(tweet)
 	return tweet
 
 #get arguments
@@ -133,7 +129,6 @@ for ugly_tweet in tweet_dump:
     tags = tag(text)
 
     # write to file
-    f4.write("\n")
     f4.write("<A=" + polarity + ">\n")
 
     i = 0
