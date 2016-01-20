@@ -66,11 +66,13 @@ def split_tweet(tweet):
     processed = "\n".join(processed)
     return processed
 
+# split punctuations
 def split_punc(tweet):
 	processed = re.sub(r"([\w])([,.!;])", r"\1 \2", tweet)
 	processed = re.sub(r"([,.!;])([\w])", r"\1 \2", processed)
 	return processed
 
+# split contracted words
 def split_contracted(tweet):
 	#test = "coul3n't would;n'tn't didn't dam't dmint dimnn't n't 3n't"
 	process = re.sub(r"(\w+(?=n't))(n't)", r"\1 \2", tweet) #split's word with its contraction, (ie: he'll -> he 'll) 
@@ -97,11 +99,14 @@ def tag(tweet):
 
 #get arguments
 filepath = sys.argv[1]
-#group = sys.argv[2]
-#out = sys.argv[3]
+group = sys.argv[2]
+out = sys.argv[3]
 
-f = open(filepath)
-tweet_dump = csv.reader(f)
+f3 = open(filepath)
+tweet_dump = csv.reader(f3)
+
+# open a new file for writting
+f4 = open(out, "w")
 
 # go through cvs tweet entries
 for ugly_tweet in tweet_dump:
@@ -113,8 +118,7 @@ for ugly_tweet in tweet_dump:
     query = ugly_tweet[3]
     user = ugly_tweet[4]
 
-    # processing
-
+    # text processing
     text = ugly_tweet[5].replace("/<[^>]+>/","")   # remove HTML tags and attrs
     text = html_to_acsii(text)                     # convert HTML codes to ASCII
     text = re.sub(r"http\S+", "", text)            # remove URLs
@@ -122,13 +126,25 @@ for ugly_tweet in tweet_dump:
     text = text.replace('@', '')                   # remove @ before usernames
     text = split_tweet(text)
 
-    #print(text) #for testing purposes rev 2.
     text = split_punc(text)
     text = split_contracted(text)
     text = split_tolist(text)
-    text = tag(text)
 
-#print(text)  for testing
-#text = tag(text)
-#print(text) for testing
+    tags = tag(text)
+
+    # write to file
+    f4.write("\n")
+    f4.write("<A=" + polarity + ">\n")
+
+    i = 0
+    for current in tags:
+        f4.write(current + " ")
+        if current == "./." and i != len(tags) - 1:
+            f4.write("\n")
+        i = i + 1
+    f4.write("\n")
+
+
+
+
     
