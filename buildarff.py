@@ -33,26 +33,30 @@ slang = ['smh', 'fwb', 'lmfao', 'lmao', 'lms', 'tbh', 'rofl', 'wtf', 'bff', 'wyd
          'atm', 'imao', 'sml', 'btw', 'bw', 'imho', 'fyi', 'ppl', 'sob', 'ttyl', 'imo', 'ltr', 'thx', 'kk', 'omg',
          'ttys', 'afn', 'bbs', 'cya', 'ez', 'f2f', 'gtr', 'ic', 'jk', 'k', 'ly', 'ya', 'nm', 'np', 'plz', 'ru',
          'so', 'tc', 'tmi', 'ym', 'ur', 'u', 'sol']
-def count_pronouns(tokens):
+
+def counter(tweet_list):
     first_count = 0
     second_count = 0
     third_count = 0
 
-    for token in tokens:
-        split_token = token.split("\\")
-        if split_token in first_person:
-            first_count = first_count + 1
-        elif split_token in second_person:
-            second_count = second_count + 1
-        elif split_token in third_person:
-            third_count = third_count + 1
+    for line in tweet_list:
+        for token in line:
+            split_token = token.split("/")
+            if split_token[0] in first_person:
+                first_count = first_count + 1
+            elif split_token[0] in second_person:
+                second_count = second_count + 1
+            elif split_token[0] in third_person:
+                third_count = third_count + 1
     return [first_count, second_count, third_count]
 
 def process(tweet_lines):
     if tweet_lines == []:
         return '\n'
 
-    return count_pronouns(tweet_lines)
+    polarity = tweet_lines[0]
+    count = counter(tweet_lines[1:])
+    return count
 
 #get arguments
 input_file = sys.argv[1]
@@ -64,9 +68,10 @@ f_out = open(output_file, "w")
 tweet = []
 for line in raw_data:                                   # loop through lines
     tokens = line.split(" ")                            # seperate lines into tokens
+
     if line == '<A=4>\n' or line== '<A=0>\n':           # look for start of new tweet
-        processed = process(tweet)                      # process tweet into meka format
-        print(processed[1:])
+        processed = process(tweet[1:])                      # process tweet into meka format
+        print(processed)
         # f_out.write(processed)                        # write processed tweet to output file
         tweet = []                                      # clear current tweet.
         tweet.append(tokens)
